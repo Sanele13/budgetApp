@@ -16,10 +16,10 @@
     <ion-item *ngFor="let expense of expenses">
       <ion-label>
         <h2>{{ expense.description }}</h2>
-        <p>{{ expense.category }} • {{ expense.date | date }}</p>
+        <p>{{ expense.date | date }}</p>
       </ion-label>
       <ion-note slot="end" color="primary">
-        ${{ expense.amount }}
+        R{{ expense.amount }}
       </ion-note>
     </ion-item>
   </ion-list>
