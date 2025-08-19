@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button color="medium" (click)="cancel()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="confirm()" [strong]="true">
+        <ion-icon name="checkmark"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+<ion-content class="ion-padding">
+  <ng-container *ngIf="expense">
+    <ion-item>
+      <ion-input labelPlacement="stacked" label="Description" [(ngModel)]="expense.description"
+        placeholder="Description"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input labelPlacement="stacked" label="Amount" [(ngModel)]="expense.amount" placeholder="Amount"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>Budget Item</ion-label>
+      <ion-select [(ngModel)]="expense.budgetItemId" interface="popover">
+        <ion-select-option *ngFor="let item of budgetItems" [value]="item.id">
+          {{ item.description }} ({{ item.amount | currency }})
+        </ion-select-option>
+      </ion-select>
+    </ion-item>
+
+  </ng-container>
+</ion-content>
