@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Expense } from '../models/expense.model';
 import { ModalController, ToastController } from '@ionic/angular';
 import { ExpenseComponent } from '../expense/expense.component';
 import { BudgetItem } from '../models/budget.item.model';
+import { BudgetService } from '../services/budget.service';
+import { Budget } from '../models/budget.model';
 
 @Component({
   selector: 'app-tab1',
@@ -10,11 +12,24 @@ import { BudgetItem } from '../models/budget.item.model';
   styleUrls: ['tab1.page.scss'],
   standalone: false,
 })
-export class Tab1Page {
+export class Tab1Page implements OnInit {
 
   expenses: Expense[] = [];
+  budget: Budget | undefined;
 
-  constructor(private modalCtrl: ModalController, private toastCtrl: ToastController) { }
+  constructor(private modalCtrl: ModalController, private toastCtrl: ToastController, private budgetService: BudgetService) {
+  }
+
+  ngOnInit() {
+    this.loadExpenses();
+  }
+
+  loadExpenses() {
+    // Load expenses from storage
+    this.budgetService.getActiveBudget().then(budget => {
+      this.expenses = budget?.expenses || [];
+    });
+  }
 
   addExpense() {
     this.modalCtrl.create({
@@ -35,11 +50,18 @@ export class Tab1Page {
         if (result.data) {
           this.expenses.push(result.data);
 
-          this.toastCtrl.create({
-            message: 'Expense added successfully!',
-            duration: 2000,
-            position: 'bottom'
-          }).then(toast => toast.present());
+          if (this.budget) {
+            this.budget.expenses = this.expenses;
+
+            this.budgetService.saveActiveBudget(this.budget).then(() => {
+              this.toastCtrl.create({
+                message: 'Expense added successfully!',
+                duration: 2000,
+                position: 'bottom'
+              }).then(toast => toast.present());
+            });
+          }
+
         }
       });
     });
@@ -64,11 +86,6 @@ export class Tab1Page {
   }
 
   getBudgetItems(): BudgetItem[] {
-    return [
-          { id: 1, description: 'Groceries', amount: 300 },
-          { id: 2, description: 'Transport', amount: 100 },
-          { id: 3, description: 'Entertainment', amount: 150 }
-        ]
+    return this.budget?.budgetItems || [];
   }
 }
-

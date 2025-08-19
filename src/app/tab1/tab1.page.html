@@ -11,6 +11,13 @@
     </ion-toolbar>
   </ion-header>
 
+  <!-- Add no active budget message -->
+  <div *ngIf="!budget">
+    <ion-text color="dark">
+      <p>No active budget found. Please create a budget first.</p>
+    </ion-text>
+  </div>
+
   <!-- Expenses List -->
   <ion-list>
     <ion-item *ngFor="let expense of expenses" (click)="viewExpense(expense)">
@@ -25,7 +32,7 @@
   </ion-list>
 
   <!-- Floating Action Button -->
-  <ion-fab vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="budget">
     <ion-fab-button (click)="addExpense()">
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>
