@@ -8,6 +8,12 @@ import { Component } from '@angular/core';
 })
 export class Tab1Page {
 
-  constructor() {}
+  expenses: any[] = [];
+
+  constructor() { }
+
+  addExpense() {
+    throw new Error('Method not implemented.');
+  }
 
 }
